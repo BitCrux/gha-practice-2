@@ -1,9 +1,20 @@
 name: Events Demo 1
 on:
-  pull_request:
+  pull_request: # event will be triggered by pull request
     types:
-      - opened
+      - opened  # event will explicitly be triggered only when a pull request is opened and
+    branches: # targets one of the defined branches
+      - main
+      - dev-*
+      - "feature/**"
   workflow_dispatch:
+  push: # event will be triggered by git push
+    branches: # only run this workflow if a push targets the defined branches
+      - main  # target by push on main branch
+      - dev-* # target by push on branch dev-<any combination of characters> (no slashes allowed!)
+      - "feature/**"  # target by push on branch feature/<any combination of characters> (slashes allowed!)
+    paths-ignore: # will run this workflow only if push does not change files in a specific path
+      - '.github/workflows/*' # the workflow will only run if no files were changed in this path
 jobs:
   deploy:
     runs-on: ubuntu-latest
